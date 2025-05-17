@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="style.css">
+    <title>Aditya's Music Player</title>
+</head>
+
+<body>
+    <div class="nav">
+        <div class="player-title">
+            <span class="title-text">Aditya's Personal Music Player</span>
+        </div>
+    </div>
+    <div class="cont">
+        <div class="library">
+            <div class="head headlib">
+                <img class="close" src="img/cancel.svg" alt="Close">
+                <h2>Songs</h2>
+            </div>
+            <div class="songlist">
+                <ul></ul>
+            </div>
+        </div>
+        <div class="main">
+            <div class="head headmain">
+                <img class="hamburger" src="img/hamburger.svg" alt="Menu">
+                <h2>Playlist</h2>
+            </div>
+            <div class="cardContainer"></div>
+        </div>
+        <div class="player-layer">
+            <div class="playbar">
+                <div class="seekbar-container">
+                    <div class="seekbar-progress">
+                        <div class="seek-circle"></div>
+                    </div>
+                </div>
+                <div class="player-controls">
+                    <div class="song-info" id="song-info"></div>
+                    <div class="control-buttons">
+                        <img id="previous" src="img/previous.svg" alt="Previous">
+                        <img id="play" src="img/play1.svg" alt="Play">
+                        <img id="next" src="img/nxtsong.svg" alt="Next">
+                        <button id="toggleAutoPlay" class="autoplay-btn" aria-label="Toggle autoplay">
+                            <img src="img/autoplay.svg" alt="Auto-play">
+                        </button>
+                    </div>
+                    <div class="volume-controls">
+                        <img src="img/volume.svg" alt="Volume">
+                        <input type="range" class="volume-slider" min="0" max="100" value="70">
+                        <div class="song-time" id="song-time">00:00 / 00:00</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
