@@ -200,24 +200,47 @@ document.addEventListener('DOMContentLoaded', function() {
             elements.cardContainer.innerHTML = "";
             
             for (const anchor of anchors) {
-                if (anchor.href.includes("/songs/") && !anchor.href.endsWith("/songs/") && !anchor.href.includes(".htaccess")){
-                    const folder = anchor.href.split("/").slice(-2)[0];
+                // Check if it's a folder (not parent directory or file)
+                if (anchor.href.includes("/songs/") && 
+                    !anchor.href.endsWith("/") && 
+                    !anchor.href.includes(".")) {
+                    
+                    const folder = anchor.href.split("/").pop();
                     
                     try {
                         const infoResponse = await fetch(`/songs/${folder}/info.json`);
                         if (infoResponse.ok) {
                             const info = await infoResponse.json();
                             elements.cardContainer.innerHTML += `
-                                <div data-folder="${folder}" class="card">
+                                <div data-folder="songs/${folder}" class="card">
                                     <div class="songimg">
                                         <img src="/songs/${folder}/cover.jpg" alt="${info.title}">
                                     </div>
                                     <div class="playlistname">${info.title}</div>
                                     <div class="playlistdescription">${info.description}</div>
                                 </div>`;
+                        } else {
+                            // Fallback if info.json doesn't exist
+                            elements.cardContainer.innerHTML += `
+                                <div data-folder="songs/${folder}" class="card">
+                                    <div class="songimg">
+                                        <img src="img/music.svg" alt="${folder}">
+                                    </div>
+                                    <div class="playlistname">${folder}</div>
+                                    <div class="playlistdescription">No description available</div>
+                                </div>`;
                         }
                     } catch (error) {
                         console.error(`Error loading info for ${folder}:`, error);
+                        // Fallback card if there's any error
+                        elements.cardContainer.innerHTML += `
+                            <div data-folder="songs/${folder}" class="card">
+                                <div class="songimg">
+                                    <img src="img/music.svg" alt="${folder}">
+                                </div>
+                                <div class="playlistname">${folder}</div>
+                                <div class="playlistdescription">No description available</div>
+                            </div>`;
                     }
                 }
             }
@@ -226,12 +249,16 @@ document.addEventListener('DOMContentLoaded', function() {
             elements.cardContainer.querySelectorAll(".card").forEach(card => {
                 card.addEventListener("click", async () => {
                     const folder = card.dataset.folder;
-                    await getsongs(`songs/${folder}`);
+                    await getsongs(folder);
                     if (songs.length > 0) playMusic(songs[0]);
                 });
             });
         } catch (error) {
             console.error("Error in displayAlbums:", error);
+            elements.cardContainer.innerHTML = `
+                <div class="error-message">
+                    Failed to load albums. Please check your network connection.
+                </div>`;
         }
     }
 
@@ -376,17 +403,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 elements.volumeControl.value = 70;
             }
             
-            // Load initial content
-            await getsongs("songs/english");
+            // First display albums
             await displayAlbums();
             
             // Setup all event listeners
             setupEventListeners();
             
-            // Play first song (paused)
-            if (songs.length > 0) {
-                playMusic(songs[0], true);
-            }
+            // Don't autoplay anything - wait for user selection
+            elements.playButton.src = "img/play.svg";
         } catch (error) {
             console.error("Initialization error:", error);
         }
