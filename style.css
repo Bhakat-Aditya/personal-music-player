@@ -87,7 +87,7 @@ body {
 .library {
     background-color: #121212;
     border-radius: 7px;
-    width: 600px;
+    width: 500px;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -426,6 +426,24 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
     background: #686868;
+}
+
+/* Add to your CSS file */
+.volume-controls img {
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.volume-controls img:hover {
+    transform: scale(1.1);
+}
+
+.volume-slider {
+    transition: opacity 0.2s;
+}
+
+.volume-slider:hover {
+    opacity: 1;
 }
 
 /* Media Queries */
