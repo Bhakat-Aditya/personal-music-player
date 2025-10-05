@@ -30,7 +30,7 @@ async function getSongs(folder) {
         div.innerHTML = text;
         let as = div.getElementsByTagName("a");
         songs = [];
-        
+
         for (let index = 0; index < as.length; index++) {
             const element = as[index];
             if (element.href.endsWith(".mp3")) {
@@ -41,7 +41,7 @@ async function getSongs(folder) {
         // Update the song list in the library
         let songUL = document.querySelector(".songlist ul");
         songUL.innerHTML = "";
-        
+
         for (const song of songs) {
             const songName = decodeURIComponent(song.replaceAll("%20", " "));
             songUL.innerHTML += `
@@ -77,7 +77,7 @@ function playMusic(track, pause = false) {
     currentSong.src = `/${currFolder}/` + track;
     document.getElementById("song-info").textContent = decodeURIComponent(track.replaceAll("%20", " "));
     document.getElementById("song-time").textContent = "00:00 / 00:00";
-    
+
     if (!pause) {
         currentSong.play()
             .then(() => {
@@ -93,7 +93,7 @@ function playMusic(track, pause = false) {
 function updateActiveSong(index) {
     const allSongs = document.querySelectorAll(".songlist li");
     allSongs.forEach(song => song.classList.remove("active"));
-    
+
     if (index >= 0 && index < allSongs.length) {
         allSongs[index].classList.add("active");
     }
@@ -181,7 +181,7 @@ async function displayAlbums() {
                     playMusic(songs[0]);
                     updateActiveSong(0);
                 }
-                
+
                 // Close library on mobile
                 if (window.innerWidth <= 768) {
                     document.querySelector(".library").classList.remove("active");
@@ -211,11 +211,11 @@ async function initializePlayer() {
     // Load initial songs and display albums
     try {
         await displayAlbums();
-        
+
         if (songs.length === 0) {
             await getSongs("songs/alan-walker");
         }
-        
+
         if (songs.length > 0) {
             playMusic(songs[0], true);
             updateActiveSong(0);
@@ -242,9 +242,9 @@ async function initializePlayer() {
 
     // Time update listener
     currentSong.addEventListener("timeupdate", () => {
-        document.getElementById("song-time").textContent = 
+        document.getElementById("song-time").textContent =
             `${secondsToMinutesSeconds(currentSong.currentTime)} / ${secondsToMinutesSeconds(currentSong.duration)}`;
-        
+
         const progressPercent = (currentSong.currentTime / currentSong.duration) * 100;
         document.querySelector(".seekbar-progress").style.width = `${progressPercent}%`;
     });
@@ -260,7 +260,7 @@ async function initializePlayer() {
     // Previous button
     document.getElementById("previous").addEventListener("click", () => {
         if (songs.length === 0) return;
-        
+
         currentSong.pause();
         const currentIndex = songs.indexOf(currentSong.src.split("/").pop());
         const prevIndex = (currentIndex - 1 + songs.length) % songs.length;
@@ -271,7 +271,7 @@ async function initializePlayer() {
     // Next button
     document.getElementById("next").addEventListener("click", () => {
         if (songs.length === 0) return;
-        
+
         currentSong.pause();
         const currentIndex = songs.indexOf(currentSong.src.split("/").pop());
         const nextIndex = (currentIndex + 1) % songs.length;
@@ -291,7 +291,7 @@ async function initializePlayer() {
         const volumeValue = e.target.value / 100;
         currentSong.volume = volumeValue;
         lastVolume = volumeValue;
-        
+
         // Update icon
         volumeIcon.src = volumeValue === 0 ? "img/mute.svg" : "img/volume.svg";
     });
